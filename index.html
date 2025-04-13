@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système de Gestion du Recrutement</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- En-tête et Navigation -->
+    <header>
+        <div class="logo">
+            <img src="img/worqly-logo-.png" alt="">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#dashboard" class="active"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a></li>
+                <li><a href="#candidates"><i class="fas fa-users"></i> Candidats</a></li>
+                <li><a href="#jobs"><i class="fas fa-briefcase"></i> Offres d'emploi</a></li>
+                <li><a href="#settings"><i class="fas fa-cog"></i> Paramètres</a></li>
+            </ul>
+        </nav>
+        <div class="user-profile">
+            
+            <div class="dropdown">
+                <span>Admin <i class="fas fa-chevron-down"></i></span>
+                <div class="dropdown-content">
+                    <a href="#"><i class="fas fa-user"></i> Profil</a>
+                    <a href="#"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenu Principal -->
+    <main>
+        <!-- Tableau de Bord -->
+        <section id="dashboard" class="section active">
+            <h2>Tableau de Bord</h2>
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-info">
+                        <h3>Candidats</h3>
+                        <p class="count">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-briefcase"></i></div>
+                    <div class="stat-info">
+                        <h3>Offres d'emploi</h3>
+                        <p class="count">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
+                    <div class="stat-info">
+                        <h3>Candidatures</h3>
+                        <p class="count">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-info">
+                        <h3>Entretiens</h3>
+                        <p class="count">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-charts">
+               
+                <div class="chart-container">
+                    <h3>Statut des candidatures</h3>
+                    <canvas id="applicationStatusChart"></canvas>
+                </div>
+            </div>
+
+            <div class="recent-activities">
+                <h3>Activités récentes</h3>
+                <ul id="activities-list">
+                    <!-- Les activités seront ajoutées dynamiquement via JavaScript -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- Gestion des Candidats -->
+        <section id="candidates" class="section">
+            <h2>Gestion des Candidats</h2>
+            <div class="action-bar">
+                <div class="search-container">
+                    <input type="text" id="candidate-search" placeholder="Rechercher un candidat...">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="filter-container">
+                    <select id="candidate-filter">
+                        <option value="all">Tous les statuts</option>
+                        <option value="new">Nouveau</option>
+                        <option value="reviewing">En cours d'évaluation</option>
+                        <option value="interview">Entretien programmé</option>
+                        <option value="offered">Offre envoyée</option>
+                        <option value="hired">Embauché</option>
+                        <option value="rejected">Rejeté</option>
+                    </select>
+                </div>
+                <button id="add-candidate-btn" class="btn primary"><i class="fas fa-plus"></i> Ajouter un candidat</button>
+            </div>
+
+            <div class="data-table-container">
+                <table id="candidates-table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Poste</th>
+                            <th>Statut</th>
+                            <th>Date de candidature</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Les candidats seront ajoutés dynamiquement via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal pour ajouter/modifier un candidat -->
+            <div id="candidate-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3 id="candidate-modal-title">Ajouter un candidat</h3>
+                    <form id="candidate-form">
+                        <input type="hidden" id="candidate-id">
+                        <div class="form-group">
+                            <label for="candidate-name">Nom complet</label>
+                            <input type="text" id="candidate-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="candidate-email">Email</label>
+                            <input type="email" id="candidate-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="candidate-phone">Téléphone</label>
+                            <input type="tel" id="candidate-phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="candidate-job">Poste</label>
+                            <select id="candidate-job" required>
+                                <!-- Les postes seront ajoutés dynamiquement via JavaScript -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="candidate-status">Statut</label>
+                            <select id="candidate-status" required>
+                                <option value="new">Nouveau</option>
+                                <option value="reviewing">En cours d'évaluation</option>
+                                <option value="interview">Entretien programmé</option>
+                                <option value="offered">Offre envoyée</option>
+                                <option value="hired">Embauché</option>
+                                <option value="rejected">Rejeté</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="candidate-resume">CV (PDF)</label>
+                            <input type="file" id="candidate-resume" accept=".pdf">
+                        </div>
+                        <div class="form-group">
+                            <label for="candidate-notes">Notes</label>
+                            <textarea id="candidate-notes" rows="4"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn secondary" id="cancel-candidate">Annuler</button>
+                            <button type="submit" class="btn primary">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gestion des Offres d'Emploi -->
+        <section id="jobs" class="section">
+            <h2>Gestion des Offres d'Emploi</h2>
+            <div class="action-bar">
+                <div class="search-container">
+                    <input type="text" id="job-search" placeholder="Rechercher une offre...">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="filter-container">
+                    <select id="job-filter">
+                        <option value="all">Tous les statuts</option>
+                        <option value="active">Active</option>
+                        <option value="draft">Brouillon</option>
+                        <option value="closed">Fermée</option>
+                    </select>
+                </div>
+                <button id="add-job-btn" class="btn primary"><i class="fas fa-plus"></i> Ajouter une offre</button>
+            </div>
+
+            <div class="data-table-container">
+                <table id="jobs-table">
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Département</th>
+                            <th>Lieu</th>
+                            <th>Type</th>
+                            <th>Date de publication</th>
+                            <th>Statut</th>
+                            <th>Candidatures</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Les offres d'emploi seront ajoutées dynamiquement via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal pour ajouter/modifier une offre d'emploi -->
+            <div id="job-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3 id="job-modal-title">Ajouter une offre d'emploi</h3>
+                    <form id="job-form">
+                        <input type="hidden" id="job-id">
+                        <div class="form-group">
+                            <label for="job-title">Titre du poste</label>
+                            <input type="text" id="job-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="job-department">Département</label>
+                            <input type="text" id="job-department" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="job-location">Lieu</label>
+                            <input type="text" id="job-location" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="job-type">Type de contrat</label>
+                            <select id="job-type" required>
+                                <option value="full-time">CDI</option>
+                                <option value="part-time">CDD</option>
+                                <option value="contract">Intérim</option>
+                                <option value="internship">Stage</option>
+                                <option value="apprenticeship">Alternance</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="job-status">Statut</label>
+                            <select id="job-status" required>
+                                <option value="draft">Brouillon</option>
+                                <option value="active">Active</option>
+                                <option value="closed">Fermée</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="job-description">Description du poste</label>
+                            <textarea id="job-description" rows="6" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="job-requirements">Prérequis</label>
+                            <textarea id="job-requirements" rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="job-salary">Salaire (optionnel)</label>
+                            <input type="text" id="job-salary">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn secondary" id="cancel-job">Annuler</button>
+                            <button type="submit" class="btn primary">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Paramètres -->
+        <section id="settings" class="section">
+            <h2>Paramètres</h2>
+            <div class="settings-container">
+                <div class="settings-card">
+                    <h3>Paramètres généraux</h3>
+                    <form id="general-settings-form">
+                        <div class="form-group">
+                            <label for="company-name">Nom de l'entreprise</label>
+                            <input type="text" id="company-name" value="Votre Entreprise">
+                        </div>
+                        <div class="form-group">
+                            <label for="company-email">Email de contact</label>
+                            <input type="email" id="company-email" value="contact@entreprise.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="company-logo">Logo de l'entreprise</label>
+                            <input type="file" id="company-logo" accept="image/*">
+                        </div>
+                        <button type="submit" class="btn primary">Enregistrer</button>
+                    </form>
+                </div>
+                
+                <div class="settings-card">
+                    <h3>Notifications</h3>
+                    <form id="notification-settings-form">
+                        <div class="form-group checkbox">
+                            <input type="checkbox" id="notify-new-candidate" checked>
+                            <label for="notify-new-candidate">Nouveau candidat</label>
+                        </div>
+                        <div class="form-group checkbox">
+                            <input type="checkbox" id="notify-interview" checked>
+                            <label for="notify-interview">Entretien programmé</label>
+                        </div>
+                        <div class="form-group checkbox">
+                            <input type="checkbox" id="notify-job-expiry" checked>
+                            <label for="notify-job-expiry">Expiration d'offre d'emploi</label>
+                        </div>
+                        <button type="submit" class="btn primary">Enregistrer</button>
+                    </form>
+                </div>
+                
+                <div class="settings-card">
+                    <h3>Exportation des données</h3>
+                    <div class="export-options">
+                        <button id="export-candidates" class="btn secondary"><i class="fas fa-file-export"></i> Exporter les candidats (CSV)</button>
+                        <button id="export-jobs" class="btn secondary"><i class="fas fa-file-export"></i> Exporter les offres d'emploi (CSV)</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pied de page -->
+    <footer>
+        <p>&copy; 2025 RecrutPro - Système de Gestion du Recrutement</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
