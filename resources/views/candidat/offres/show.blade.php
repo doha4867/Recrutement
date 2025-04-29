@@ -15,7 +15,7 @@
             <h1 class="fw-bold mb-0">{{ $offre->titre }}</h1>
             
         </div>
-        <div class="d-flex flex-wrap gap-4 mt-3 text-secondary">
+        {{-- <div class="d-flex flex-wrap gap-4 mt-3 text-secondary">
             <div>
                 <i class="far fa-calendar-alt me-2"></i>
                 @if($offre->date_debut && $offre->date_fin)
@@ -28,9 +28,8 @@
                     Dates non précisées
                 @endif
             </div>
-            <div><i class="far fa-clock me-2"></i>{{ $offre->duree }} mois</div>
-            <div><i class="fas fa-user-friends me-2"></i>{{ $offre->places }} place(s) disponible(s)</div>
-        </div>
+            
+        </div> --}}
     </div>
 
     <div class="card-body">
