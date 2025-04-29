@@ -44,12 +44,7 @@ Route::middleware('auth')->group(function () {
         Route::patch('/comptes/user/{user}/password', [AdminCompteController::class, 'changerMotDePasse'])->name('comptes.password');
         Route::delete('/comptes/{compte}', [AdminCompteController::class, 'destroy'])->name('comptes.destroy');
         
-        // Maintenance système
-        Route::get('/system', [SystemController::class, 'index'])->name('system.index');
-        Route::get('/system/maintenance', [SystemController::class, 'maintenirSysteme'])->name('system.maintenance');
-        Route::post('/system/optimize', [SystemController::class, 'optimiser'])->name('system.optimize');
-        Route::post('/system/backup', [SystemController::class, 'backup'])->name('system.backup');
-        Route::get('/system/comptes-entreprise', [SystemController::class, 'gererComptesEntreprise'])->name('system.comptes-entreprise');
+
     });
     
     // Routes candidat
