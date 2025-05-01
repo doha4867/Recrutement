@@ -9,6 +9,67 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+    <style>
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9999;
+            transform: translateX(200%);
+            animation: slideIn 0.5s forwards, fadeOut 0.5s 4.5s forwards;
+            overflow: hidden;
+        }
+        
+        .success-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .success-content svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+        
+        .success-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            width: 100%;
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .success-progress::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: white;
+            animation: progress 5s linear forwards;
+        }
+        
+        @keyframes slideIn {
+            100% { transform: translateX(0); }
+        }
+        
+        @keyframes fadeOut {
+            100% { opacity: 0; visibility: hidden; }
+        }
+        
+        @keyframes progress {
+            100% { width: 0; }
+        }
+    </style>
 </head>
 <body>
 
@@ -180,7 +241,7 @@
                         <span class="skill-tag">Node.js</span>
                     </div>
                     <div class="job-actions">
-                        <button class="btn btn-outline view-job-btn">Voir détails</button>
+                        <a href="{{ route('offres-public.index') }}"  class="btn btn-outline "> Voir détails</a>
                         <button class="btn btn-primary apply-job-btn">Postuler</button>
                     </div>
                 </div>
@@ -219,7 +280,7 @@
                         <span class="skill-tag">Social Media</span>
                     </div>
                     <div class="job-actions">
-                        <button class="btn btn-outline view-job-btn">Voir détails</button>
+                        <a href="{{ route('offres-public.index') }}"  class="btn btn-outline "> Voir détails</a>
                         <button class="btn btn-primary apply-job-btn">Postuler</button>
                     </div>
                 </div>
@@ -258,13 +319,15 @@
                         <span class="skill-tag">SQL</span>
                     </div>
                     <div class="job-actions">
-                        <button class="btn btn-outline view-job-btn">Voir détails</button>
+                        <a href="{{ route('offres-public.index') }}"  class="btn btn-outline "> Voir détails</a>
                         <button class="btn btn-primary apply-job-btn">Postuler</button>
                     </div>
                 </div>
             </div>
             <div class="view-all-container">
-                <button class="btn btn-outline-large">Voir toutes les offres</button>
+                <a href="{{ route('offres-public.index') }}" class="btn btn-outline-large">
+                    Voir toutes les offres
+                </a>
             </div>
         </div>
     </section>
@@ -456,7 +519,8 @@
                     
                     <a  class="btn btn-light" href="{{ route('register') }}" role="button" id="registerBtn">Créer un compte</a>
                     
-                    <button class="btn btn-outline-light" >Explorer les offres</button>
+                    
+                    <a href="{{ route('offres-public.index') }}" class="btn btn-outline-light">Explorer les offres</a>
                 </div>
             </div>
         </div>
@@ -500,7 +564,19 @@
                     </div>
                 </div>
                 <div class="contact-form">
-                    <form id="contactForm">
+                    @if(session('success'))
+                    <div class="success-message">
+                        <div class="success-content">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <span>{{ session('success') }}</span>
+                        </div>
+                        <div class="success-progress"></div>
+                    </div>
+                @endif
+                    <form  method="POST" action="{{ route('contact.store') }}">
+                        @csrf
                         <div class="form-group">
                             <label for="name">Nom complet</label>
                             <input type="text" id="name" name="name" placeholder="Votre nom" required>
@@ -587,91 +663,6 @@
         </div>
     </footer>
 
-    <!-- Authentication Modal -->
-    <div class="modal" id="authModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="tabs">
-                    <button class="tab-btn active" data-tab="login">Connexion</button>
-                    <button class="tab-btn" data-tab="register">Inscription</button>
-                </div>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <!-- Login Tab -->
-                <div class="tab-content" id="login-tab">
-                    <form id="loginForm">
-                        <div class="form-group">
-                            <label for="loginEmail">Email</label>
-                            <input type="email" id="loginEmail" name="email" placeholder="Votre email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="loginPassword">Mot de passe</label>
-                            <input type="password" id="loginPassword" name="password" placeholder="Votre mot de passe" required>
-                        </div>
-                        <div class="form-options">
-                            <div class="remember-me">
-                                <input type="checkbox" id="rememberMe" name="rememberMe">
-                                <label for="rememberMe">Se souvenir de moi</label>
-                            </div>
-                            <a href="#" class="forgot-password">Mot de passe oublié ?</a>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
-                    </form>
-                    <div class="social-login">
-                        <p>Ou connectez-vous avec</p>
-                        <div class="social-buttons">
-                            <button class="social-btn google"><i class="fab fa-google"></i> Google</button>
-                            <button class="social-btn linkedin"><i class="fab fa-linkedin-in"></i> LinkedIn</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Register Tab -->
-                <div class="tab-content hidden" id="register-tab">
-                    <form id="registerForm">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="registerNom">Nom</label>
-                                <input type="text" id="registerNom" name="nom" placeholder="Votre nom" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="registerPrenom">Prénom</label>
-                                <input type="text" id="registerPrenom" name="prenom" placeholder="Votre prénom" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="registerEmail">Email</label>
-                            <input type="email" id="registerEmail" name="email" placeholder="Votre email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="registerPassword">Mot de passe</label>
-                            <input type="password" id="registerPassword" name="password" placeholder="Votre mot de passe" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="registerConfirmPassword">Confirmer le mot de passe</label>
-                            <input type="password" id="registerConfirmPassword" name="confirmPassword" placeholder="Confirmez votre mot de passe" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="registerRole">Je suis un</label>
-                            <select id="registerRole" name="role" required>
-                                <option value="">Sélectionnez votre profil</option>
-                                <option value="candidat">Candidat</option>
-                                <option value="recruteur">Recruteur</option>
-                            </select>
-                        </div>
-                        <div class="form-options">
-                            <div class="terms-agree">
-                                <input type="checkbox" id="termsAgree" name="termsAgree" required>
-                                <label for="termsAgree">J'accepte les <a href="#">conditions d'utilisation</a> et la <a href="#">politique de confidentialité</a></label>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">S'inscrire</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script src="{{ asset('js/enhanced_app.js') }}"></script>
 

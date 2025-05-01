@@ -11,12 +11,24 @@ use App\Http\Controllers\Candidat\DashboardController as CandidatDashboardContro
 use App\Http\Controllers\Candidat\EntretienController;
 use App\Http\Controllers\Candidat\OffreController;
 use App\Http\Controllers\Candidat\ProfileController;
+use App\Http\Controllers\GuestOffreController;
+use App\Http\Controllers\ContactController;
+
 use Illuminate\Support\Facades\Route;
 
 // Routes publiques
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+
+
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+
+// Routes publiques pour les visiteurs
+//Route::get('/offres-public', [GuestOffreController::class, 'index'])->name('guest.offres.index');
+Route::get('/offres-public', [GuestOffreController::class, 'index'])->name('offres-public.index');
+Route::get('/offres-public/{offre}', [GuestOffreController::class, 'show'])->name('guest.offres.show');
 
 // Routes d'authentification
 Route::middleware('guest')->group(function () {

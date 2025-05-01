@@ -32,6 +32,7 @@
     @yield('styles')
 </head>
 <body>
+  
     <!-- Navigation moderne -->
     <nav class="navbar navbar-expand-md">
         <div class="container">
